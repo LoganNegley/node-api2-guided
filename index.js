@@ -57,7 +57,7 @@ server.get('/api/users/:id', (req, res) =>{
 });
 
 // Update users
-    server.put('/api/users/:id'), (req, res) => {
+    server.put('/api/users/:id', (req, res) => {
 const user = database.getUserById(req.params.id)
 
     if(user){
@@ -73,16 +73,23 @@ const user = database.getUserById(req.params.id)
         })
     }
 
-};
-
-
+});
 
 // Delete request
-server.delete('/api/users/:id', (req, res => {
-    const userId = req.params.id
-    const user = database.deleteUser(userId)
+server.delete('/api/users/:id', (req, res) => {
+    const user = database.getUserById(req.params.id)
+    
+    if(user){
+         database.deleteUser(user.id)
+         res.status(204).end()
+    } else{
+        res.status(404).json({
+            errorMessage: 'The user with the specified Id does not exist'
+        })
+    }
 
-}))
+
+})
 
 server.listen(4000, () => {
 console.log('listening on port 4000')
