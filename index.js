@@ -2,12 +2,20 @@ const express = require('express');
 const database = require('./database.js');
 
 const server = express();
-
+//get users
 server.get('/api/users', (req, res) =>{
     const users = database.getUsers()
-    res.json(users);
-});
+    
 
+    if(users){
+        res.json(users);
+    } else{
+        res.status(500).json({
+            errorMessage:'The users information could not be retrieved'
+        })
+    }
+});
+//get user by id
 server.get('/api/users/:id', (req, res) =>{
     const userId = req.params.id
     const user = database.getUserById(userId)
